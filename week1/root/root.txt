@@ -1,0 +1,22 @@
+total 60
+drwxr-xr-x    2 0 0 4096 Apr 15  2020 boot
+lrwxrwxrwx    1 0 0    8 Apr 16  2021 sbin -> usr/sbin
+lrwxrwxrwx    1 0 0   10 Apr 16  2021 libx32 -> usr/libx32
+lrwxrwxrwx    1 0 0    9 Apr 16  2021 lib64 -> usr/lib64
+lrwxrwxrwx    1 0 0    9 Apr 16  2021 lib32 -> usr/lib32
+lrwxrwxrwx    1 0 0    7 Apr 16  2021 lib -> usr/lib
+drwxr-xr-x    2 0 0 4096 Apr 16  2021 srv
+drwxr-xr-x    2 0 0 4096 Apr 16  2021 media
+drwxr-xr-x   14 0 0 4096 Jul 22  2022 usr
+drwxr-xr-x   13 0 0 4096 Jul 22  2022 var
+drwxr-xr-x   11 0 0 4096 Jul 22  2022 run
+drwxr-xr-x    3 0 0 4096 Jul 22  2022 mnt
+drwxr-xr-x    4 0 0 4096 Jul 22  2022 opt
+drwx------    6 0 0 4096 Jul 22  2022 root
+dr-xr-xr-x    2 0 0 4096 Jul 22  2022 sys
+drwxr-xr-x    1 0 0 4096 Sep 12 17:58 etc
+drwxr-xr-x    1 0 0 4096 Sep 12 17:58 bin
+drwxr-xr-x    1 0 0 4096 Sep 12 17:58 home
+drwxr-xr-x    1 0 0 4096 Sep 12 17:58 dev
+dr-xr-xr-x 3946 0 0    0 Sep 12 17:58 proc
+drwxrwxrwx    2 0 0 4096 Sep 12 18:55 tmp

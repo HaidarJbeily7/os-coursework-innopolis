@@ -1,0 +1,13 @@
+total 37700
+-rwxr-xr-x 1 haidara72 registered_users      232 Jul  9 08:38 README.txt
+-rw-rw-r-- 1 haidara72 registered_users    17209 Jul  9 08:53 backend-main.zip
+drwxrwxr-x 7 haidara72 registered_users     4096 Jul  9 09:12 prostart
+-rw-r--r-- 1 haidara72 registered_users      161 Aug 16 17:10 requirements.txt
+-rw-r--r-- 1 haidara72 registered_users 13439141 Aug 24 04:31 back.mp4
+drwxr-xr-x 2 haidara72 registered_users     4096 Aug 24 06:18 images
+-rw-rw-r-- 1 haidara72 registered_users 25070150 Aug 24 06:33 Archive.zip
+-rw-r--r-- 1 haidara72 registered_users    15004 Sep 10 21:00 main.py
+-rw-rw-r-- 1 haidara72 registered_users      213 Sep 12 18:01 ex2.txt
+-rw-rw-r-- 1 haidara72 registered_users     4282 Sep 12 18:41 week1.zip
+drwxrwxr-x 4 haidara72 registered_users     4096 Sep 12 18:47 __MACOSX
+drwxrwxr-x 4 haidara72 registered_users     4096 Sep 12 19:22 week1
