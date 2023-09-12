@@ -1,0 +1,24 @@
+    1  ls /usr/bin | grep gcc | sort -r | tail -n 5
+    2  ls /usr/bin | grep gcc | sort -r
+    3  ls /usr/bin | grep gcc | sort -r | tail -n 5
+    4  pwd
+    5  ls -a
+    6  man --help
+    7  history > "ex2.txt"
+    8  cat ex2.txt 
+    9  unzip week1.zip 
+   10  cd week1/
+   11  ;s
+   12  ls
+   13  bash ex1.sh 
+   14  bash ex2.sh 
+   15  ls
+   16  cat ex2.txt 
+   17  bash ex2.sh 
+   18  cat ex2.txt 
+   19  bash ex2.sh 
+   20  cat ex2.txt 
+   21  history
+   22  pwd
+   23  ls -a
+   24  source ex2.sh 
