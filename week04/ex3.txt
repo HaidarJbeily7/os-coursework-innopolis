@@ -1,0 +1,11 @@
+In case of n = 3, The original process (let's call it Process 1) calls fork(), creating Process 2. Now, 
+we have two processes: Process 1 and Process 2.
+
+Both Process 1 and Process 2 call fork() again, resulting in two new child processes for each, 
+so we have Process 3, Process 4, Process 5, and Process 6. Now, we have a total of 6 processes.
+
+Finally, all six processes (Process 1 to Process 6) call fork() once more,
+doubling again. This gives us a total of 2^3 = 8
+
+In this way, you can see that the number of processes increases exponentially with each call to fork(). 
+So, if you called fork() five times, you would end up with 2^5 = 32 processes.
