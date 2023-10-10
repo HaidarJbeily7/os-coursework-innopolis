@@ -1,0 +1,6 @@
+m | Execution Time (seconds)
+1 | 0m7.444s
+2 | 0m5.090s
+4 | 0m5.810s
+10 | 0m5.664s
+100 | 0m7.114s

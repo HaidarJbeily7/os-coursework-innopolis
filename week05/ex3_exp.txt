@@ -1,0 +1,18 @@
+For m = 1: The program runs with only one thread.
+While this eliminates thread synchronization overhead,
+it doesn't fully utilize the available CPU cores, resulting in a longer execution time.
+
+For m = 2, m = 4, and m = 10: These values of m increase the number of threads, 
+allowing the program to distribute the work across multiple CPU cores. 
+This parallelism reduces execution time, making the program faster.
+
+For m = 100: With a large number of threads, 
+the program may encounter increased overhead from thread creation and management. 
+As a result, the execution time can be slightly longer compared to the optimal 
+number of threads (e.g., 2 or 4) because of the additional overhead involved in managing a 
+larger number of threads.
+
+In summary, the execution time decreases as the number of threads (m) increases from 1 to 10 due to
+improved parallelism. However, when m becomes very large (e.g., 100), the overhead of managing a large number of 
+threads can counterbalance the benefits of parallelism, resulting in a slightly longer execution time compared 
+to an optimal number of threads.

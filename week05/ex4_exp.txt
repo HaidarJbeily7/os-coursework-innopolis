@@ -1,0 +1,20 @@
+In this experiment, we implemented a different approach to solving the problem of 
+counting prime numbers in the range [0, n). 
+Instead of dividing the range into subintervals and distributing them among threads,
+we utilized global variables and mutexes to synchronize access to these variables. 
+Each thread reads the global variable k, checks it for primality, and increments 
+it if necessary. Additionally, it increments the global variable c if a prime number is found. 
+
+
+For m = 1: With only one thread, the program runs in a sequential manner, 
+similar to exercise 3. As a result, the execution time is relatively high.
+
+For m = 2, m = 4, and m = 10: These values of m increase the number of threads, 
+allowing for parallel execution. The program efficiently distributes the work, 
+leading to reduced execution times compared to the single-threaded approach in exercise 3. 
+The efficiency of parallelism is evident here.
+
+For m = 100: With a large number of threads, the program still demonstrates efficient parallelism. 
+However, as observed in exercise 3, managing a larger number of threads may introduce some overhead. 
+This overhead is reflected in a slightly longer execution time compared to the optimal values of m, such as 2 or 4.
+
