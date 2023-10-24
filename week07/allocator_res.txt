@@ -1,0 +1,9 @@
+Algorithm: first_fit
+Total Allocation Time: 0.471 seconds
+Throughput: 72.12 queries/second
+Algorithm: best_fit
+Total Allocation Time: 0.479 seconds
+Throughput: 70.96 queries/second
+Algorithm: worst_fit
+Total Allocation Time: 0.466 seconds
+Throughput: 72.96 queries/second

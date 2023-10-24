@@ -1,0 +1,12 @@
+
+Throughput:
+
+The "Worst Fit" algorithm has the highest throughput at 72.96 queries/second, indicating that it can handle a larger number of queries in a given time frame.
+The "First Fit" algorithm follows closely with a throughput of 72.12 queries/second.
+The "Best Fit" algorithm has the lowest throughput at 70.96 queries/second, meaning it processes queries less efficiently than the other two algorithms.
+
+To summarize, the "Worst Fit" algorithm performs well in terms of total allocation time and throughput,
+ making it a good choice for scenarios where speed and efficiency are critical. 
+ The "First Fit" algorithm is also competitive in terms of throughput and time. 
+ The "Best Fit" algorithm, while not significantly slower, has slightly lower performance compared 
+ to the other two algorithms in this specific context.
