@@ -1,0 +1,19 @@
+Observations:
+
+When running the program 'ex3', 
+we can observe that memory allocation increases over time, as expected. 
+This is because every second, the program allocates 10 MB of memory 
+and fills it with zeros.
+
+Using 'vmstat 1', we can monitor various aspects of the system's performance. 
+The 'si' and 'so' fields are particularly relevant here. 
+They represent the amount of memory swapped in from disk and swapped out to disk, 
+respectively, in kilobytes per second.
+
+Initially, depending on available free RAM, the 'si' and 'so' fields might remain at low values. But as memory becomes scarcer (either due to our program or other processes), there could be an increase in the 'so' value,
+
+Conclusion:
+
+The program effectively demonstrates the behavior of memory allocation and
+ its impacts on system performance. Continuous memory allocation without freeing 
+ it can lead to potential swapping, which can degrade system performance significantly.
