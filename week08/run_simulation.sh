@@ -15,6 +15,4 @@ PAGER_PID=$!
 sleep 2
 
 # Run the MMU with a sample reference string
-./mmu 4 R0 W1 R2 R3 W4 R5 W6 R7 R8 R9 $PAGER_PID
-
-# kill -9 $PAGER_PID
+./mmu 4 R0 R1 W1 R0 R2 W2 R0 R3 W2 $PAGER_PID

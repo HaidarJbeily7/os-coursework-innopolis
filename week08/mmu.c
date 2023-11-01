@@ -10,6 +10,8 @@
 #define PAGETABLE "/tmp/ex2/pagetable"
 #define PAGE_SIZE 8
 
+
+int waiter = 1;
 struct PTE {
     bool valid;
     int frame;
@@ -19,7 +21,7 @@ struct PTE {
 
 void sigcont_handler(int signum) {
     (void) signum; // To avoid unused parameter warning
-    printf("Received SIGCONT. Page fault handled.\n");
+    waiter = 0;
 }
 
 int main(int argc, char *argv[]) {
@@ -38,7 +40,7 @@ int main(int argc, char *argv[]) {
     sigaction(SIGCONT, &sa, NULL);
 
     // Open and map the page table
-    int fd = open(PAGETABLE, O_RDWR);
+    int fd = open(PAGETABLE, O_RDWR, 0666);
     if (fd == -1) {
         perror("Error opening page table file");
         exit(1);
@@ -49,25 +51,66 @@ int main(int argc, char *argv[]) {
         close(fd);
         exit(1);
     }
+    printf("\n\n####### MMU #######\n\n");
+    printf("Initialized page table\n");
+    for (int i = 0; i < num_pages; i++)
+    {
+        printf("Page %d ---> valid:%d, frame=%d, dirty=%d, referenced=%d\n", i, page_table[i].valid, page_table[i].frame, page_table[i].dirty, page_table[i].referenced);
+    }
+
+    printf("------------------------------\n");
+
 
     for (int i = 2; i < argc - 1; i++) {
+        printf("\n\n####### MMU #######\n\n");
+        printf("------------------------------\n");
         char mode = argv[i][0];
-        int page = atoi(argv[i] + 1);
+        char num = argv[i][1];
+        int page = (int)(num - '0');
+        if (mode == 'W')
+        {
+            printf("Write Request for page %d\n", page);
+        }
+        else
+        {
+            printf("Read Request for page %d\n", page);
+        }
 
         if (page_table[page].valid) {
-            if (mode == 'W') {
+            printf("It is a valid page\n");
+            if (mode == 'W')
+            {
                 page_table[page].dirty = true;
+                printf("It is a write request then set the dirty field\n");
             }
-            // Print the updated page table
+            
         } else {
-            // Page fault
-            page_table[page].referenced = getpid(); // Setting the referenced field to MMU PID
+            printf("It is not a valid page --> page fault\n");
+            printf("Ask pager to load it from disk (SIGUSR1 signal) and wait\n");
+            page_table[page].referenced = getpid();
             kill(pager_pid, SIGUSR1);
-            pause(); 
+            while (/* condition */ waiter)
+            {
+                /* code */
+            }
+            waiter = 1;
+            printf("MMU resumed by SIGCONT signal from pager\n");
         }
+
+
+        printf("Page table\n");
+        for (int i = 0; i < num_pages; i++)
+        {
+            printf("Page %d ---> valid:%d, frame=%d, dirty=%d, referenced=%d\n", i, page_table[i].valid, page_table[i].frame, page_table[i].dirty, page_table[i].referenced);
+        }
+
+        printf("------------------------------\n\n");
     }
     kill(pager_pid, SIGUSR1);
     munmap(page_table, num_pages * sizeof(struct PTE));
     close(fd);
+    printf("\nDone all requests.\n");
+    printf("MMU sends SIGUSR1 to the pager.\n");
+    printf("MMU terminates.\n");
     return 0;
 }
