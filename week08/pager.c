@@ -66,8 +66,6 @@ void sigusr1_handler(int signum)
     printf("A disk access request from MMU Process (pid=%d)\n", pid);
     printf("Page %d is referenced\n", invalid_page);
 
-    // Swap the page from the disk to RAM (a basic swap-in without considering swap-out)
-    // Let's assume the first frame in free_frames will be used
     int frame_to_use = -1;
     for (int i = 0; i < num_frames; i++)
     {
