@@ -21,6 +21,14 @@ struct PTE
     int referenced;
 };
 
+typedef enum
+{
+    RANDOM, // Enum value for random page replacement
+    NFU,    // Enum value for Not Frequently Used page replacement
+    AGING   // Enum value for Aging page replacement
+} ReplacementAlgorithm;
+
+ReplacementAlgorithm replacement_algorithm;
 char **RAM, **disk;
 int *free_frames, num_frames, num_pages;
 struct PTE *page_table;
@@ -38,6 +46,60 @@ void initialize_disk(int num_pages)
         }
     }
 }
+
+unsigned char *age_counters; // For aging algorithm
+int *reference_counters;     // For NFU algorithm
+
+// Random page replacement
+int random_page(struct PTE *page_table, int num_pages)
+{
+    int victim;
+    do
+    {
+        victim = rand() % num_pages;
+    } while (!page_table[victim].valid);
+
+    return victim;
+}
+
+// NFU page replacement
+int nfu(struct PTE *page_table, int num_pages)
+{
+    int victim = 0;
+    for (int i = 1; i < num_pages; i++)
+    {
+        if (page_table[i].valid && (reference_counters[i] < reference_counters[victim]))
+        {
+            victim = i;
+        }
+    }
+    return victim;
+}
+
+// Aging page replacement
+int aging(struct PTE *page_table, int num_pages)
+{
+    int victim = 0;
+    for (int i = 0; i < num_pages; i++)
+    {
+
+        age_counters[i] = age_counters[i] >> 1;
+
+        if (page_table[i].referenced)
+        {
+            age_counters[i] = age_counters[i] | (1 << 7);
+        }
+
+        if (page_table[i].valid && (age_counters[i] < age_counters[victim]))
+        {
+            victim = i;
+        }
+
+        page_table[i].referenced = 0;
+    }
+    return victim;
+}
+
 void sigusr1_handler(int signum)
 {
 
@@ -95,6 +157,21 @@ void sigusr1_handler(int signum)
                 break;
             }
         }
+        // Example usage in your replacement logic (pseudo-code)
+        int victim_page = -1;
+        switch (replacement_algorithm)
+        {
+        case RANDOM:
+            victim_page = random_page(page_table, num_pages);
+            break;
+        case NFU:
+            victim_page = nfu(page_table, num_pages);
+            break;
+        case AGING:
+            victim_page = aging(page_table, num_pages);
+            break;
+        }
+
         printf("Chose a random victim page %d\n", victim);
         printf("Replace/Evict it with page %d to be allocated to frame %d\n", invalid_page, frame_to_use);
     }
@@ -131,7 +208,7 @@ void sigusr1_handler(int signum)
 
 int main(int argc, char *argv[])
 {
-    if (argc != 3)
+    if (argc != 4)
     {
         printf("Usage: %s <num_pages> <num_frames>\n", argv[0]);
         exit(1);
@@ -140,12 +217,35 @@ int main(int argc, char *argv[])
     num_pages = atoi(argv[1]);
     num_frames = atoi(argv[2]);
 
+    const char *algorithm_str = argv[3];
+
+    if (strcmp(algorithm_str, "random") == 0)
+    {
+        replacement_algorithm = RANDOM;
+    }
+    else if (strcmp(algorithm_str, "nfu") == 0)
+    {
+        replacement_algorithm = NFU;
+    }
+    else if (strcmp(algorithm_str, "aging") == 0)
+    {
+        replacement_algorithm = AGING;
+    }
+    else
+    {
+        fprintf(stderr, "Invalid page replacement algorithm specified\n");
+        exit(EXIT_FAILURE);
+    }
+
     // Setting up SIGUSR1 handler
     struct sigaction sa;
     sa.sa_handler = sigusr1_handler;
     sa.sa_flags = 0;
     sigemptyset(&sa.sa_mask);
     sigaction(SIGUSR1, &sa, NULL);
+
+    age_counters = calloc(num_pages, sizeof(unsigned char));
+    reference_counters = calloc(num_pages, sizeof(int));
 
     printf("\n\n####### Pager #######\n\n");
 
@@ -218,6 +318,9 @@ int main(int argc, char *argv[])
     while (waiter)
     {
     }
+
+    free(age_counters);
+    free(reference_counters);
 
     return 0;
 }
