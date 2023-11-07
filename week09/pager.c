@@ -107,6 +107,7 @@ void sigusr1_handler(int signum)
         {
             invalid_page = i;
             pid = page_table[i].referenced;
+            reference_counters[i]++;
             break;
         }
     }
@@ -124,10 +125,6 @@ void sigusr1_handler(int signum)
 
     for (int i = 0; i < num_pages; i++)
     {
-        if (replacement_algorithm == NFU && page_table[i].valid)
-        {
-            reference_counters[i]++;
-        }
         if (replacement_algorithm == AGING && page_table[i].valid)
         {
             age_counters[i] >>= 1;
