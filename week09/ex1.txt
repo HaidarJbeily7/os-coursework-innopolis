@@ -1,9 +1,14 @@
 Based on the simulation outputs, here's a summary of the hit ratios for the three different page replacement algorithms:
 
+
 Random Replacement Algorithm: Hit Ratio = 0.857143
 NFU (Not Frequently Used) Algorithm: Hit Ratio = 0.714286
 Aging Algorithm: Hit Ratio = 0.714286
 
+Note: the above values are based on average or running each algorithm three times..
+
+I tried the testcase provided in the gist and it returned the same ratio for all algorithms so I changed the testcase to something 
+simpler but would show the difference between the random replacement algorithm and other algorithms.
 
 From these results, we can see that the random replacement algorithm performed slightly better than NFU and Aging in this particular 
 scenario. The NFU and Aging algorithms both yielded the same hit ratio. 
