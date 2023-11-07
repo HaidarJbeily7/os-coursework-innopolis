@@ -79,25 +79,19 @@ int nfu(struct PTE *page_table, int num_pages)
 // Aging page replacement
 int aging(struct PTE *page_table, int num_pages)
 {
-    int victim = 0;
+    int lowest_age_index = -1;
+    unsigned char lowest_age = 0xFF; // Initialize to the highest possible age
+
     for (int i = 0; i < num_pages; i++)
     {
-
-        age_counters[i] = age_counters[i] >> 1;
-
-        if (page_table[i].referenced)
+        // We're looking for a valid page with the lowest age counter
+        if (page_table[i].valid && age_counters[i] < lowest_age)
         {
-            age_counters[i] = age_counters[i] | (1 << 7);
+            lowest_age_index = i;
+            lowest_age = age_counters[i];
         }
-
-        if (page_table[i].valid && (age_counters[i] < age_counters[victim]))
-        {
-            victim = i;
-        }
-
-        page_table[i].referenced = 0;
     }
-    return victim;
+    return lowest_age_index;
 }
 
 void sigusr1_handler(int signum)
@@ -128,6 +122,22 @@ void sigusr1_handler(int signum)
     printf("A disk access request from MMU Process (pid=%d)\n", pid);
     printf("Page %d is referenced\n", invalid_page);
 
+    for (int i = 0; i < num_pages; i++)
+    {
+        if (replacement_algorithm == NFU && page_table[i].valid)
+        {
+            reference_counters[i]++;
+        }
+        if (replacement_algorithm == AGING && page_table[i].valid)
+        {
+            age_counters[i] >>= 1;
+            if (page_table[i].referenced)
+            {
+                age_counters[i] |= (1 << 7);
+            }
+            page_table[i].referenced = 0;
+        }
+    }
     int frame_to_use = -1;
     for (int i = 0; i < num_frames; i++)
     {

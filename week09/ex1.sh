@@ -8,8 +8,8 @@ gcc pager.c -o pager
 mkdir -p /tmp/ex2
 
 
-NUM_PAGES=999
-NUM_FRAMES=40
+NUM_PAGES=3
+NUM_FRAMES=1
 
 
 # Ensure ex1.txt is empty before we start
@@ -22,7 +22,7 @@ ALGORITHMS=("random" "nfu" "aging")
 run_simulation() {
     ALGORITHM=$1
     echo "Running simulation with $ALGORITHM replacement algorithm..."
-    echo "Running simulation with $ALGORITHM replacement algorithm..." >> ex1.txt
+    echo "Running simulation with $ALGORITHM replacement algorithm..." >> ex1_mmu.txt
 
     # Start the pager with the given algorithm
     ./pager $NUM_PAGES $NUM_FRAMES $ALGORITHM &
@@ -32,7 +32,7 @@ run_simulation() {
     sleep 2
 
     # Run the MMU with a sample reference string
-    ./mmu $NUM_PAGES $PAGER_PID >> ex1.txt
+    ./mmu $NUM_PAGES $PAGER_PID >> ex1_mmu.txt
 
     # Terminate pager
     kill -SIGUSR1 $PAGER_PID
