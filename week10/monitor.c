@@ -70,55 +70,91 @@ void handle_events(int fd, const char *dir)
             event = (const struct inotify_event *)ptr;
 
             // Process the event
-            printf("Event: ");
-            if (event->mask & IN_ACCESS)
-                printf("IN_ACCESS ");
-            if (event->mask & IN_CREATE)
-                printf("IN_CREATE ");
-            if (event->mask & IN_DELETE)
-                printf("IN_DELETE ");
-            if (event->mask & IN_MODIFY)
-                printf("IN_MODIFY ");
-            if (event->mask & IN_OPEN)
-                printf("IN_OPEN ");
-            if (event->mask & IN_ATTRIB)
-                printf("IN_ATTRIB ");
-            printf(" - File: %s\n", event->len ? event->name : "");
+            if (event->len)
+            {
+                if (event->mask & IN_ACCESS)
+                {
+
+                    printf("The file %s was Accessed with WD %d\n", event->name, event->wd);
+                }
+
+                if (event->mask & IN_CREATE)
+                {
+                    if (event->mask & IN_ISDIR)
+                    {
+                        printf("The directory %s was Created.\n", event->name);
+                    }
+                    else
+                    {
+                        printf("The file %s was Created with WD %d\n", event->name, event->wd);
+                    }
+                }
+
+                if (event->mask & IN_DELETE)
+                {
+                    if (event->mask & IN_ISDIR)
+                    {
+                        printf("The directory %s was Deleted.\n", event->name);
+                    }
+                    else
+                    {
+                        printf("The file %s was Deleted with WD %d\n", event->name, event->wd);
+                    }
+                }
+                if (event->mask & IN_MODIFY)
+                {
+                    printf("The file %s was modified.\n", event->name);
+                }
+                if (event->mask & IN_OPEN)
+                {
+                    if (event->mask & IN_ISDIR)
+                    {
+                        printf("The directory %s was Opened.\n", event->name);
+                    }
+                    else
+                    {
+                        printf("The file %s was Opened.\n", event->name);
+                    }
+                }
+                if (event->mask & IN_ATTRIB)
+                {
+                    printf("The file %s metadata was Changed.\n", event->name);
+                }
+            }
         }
     }
-}
 
-int main(int argc, char **argv)
-{
-    if (argc != 2)
+    int main(int argc, char **argv)
     {
-        fprintf(stderr, "Usage: %s <path to monitor>\n", argv[0]);
-        return EXIT_FAILURE;
-    }
+        if (argc != 2)
+        {
+            fprintf(stderr, "Usage: %s <path to monitor>\n", argv[0]);
+            return EXIT_FAILURE;
+        }
 
-    strncpy(monitored_dir, argv[1], PATH_MAX);
+        strncpy(monitored_dir, argv[1], PATH_MAX);
 
-    // Setup signal handler
-    signal(SIGINT, signal_handler);
+        // Setup signal handler
+        signal(SIGINT, signal_handler);
 
-    inotify_fd = inotify_init();
-    if (inotify_fd < 0)
-    {
-        perror("inotify_init");
-        return EXIT_FAILURE;
-    }
+        inotify_fd = inotify_init();
+        if (inotify_fd < 0)
+        {
+            perror("inotify_init");
+            return EXIT_FAILURE;
+        }
 
-    int wd = inotify_add_watch(inotify_fd, argv[1], IN_ALL_EVENTS);
-    if (wd == -1)
-    {
-        perror("inotify_add_watch");
+        int wd = inotify_add_watch(inotify_fd, argv[1], IN_ALL_EVENTS);
+        if (wd == -1)
+        {
+            perror("inotify_add_watch");
+            close(inotify_fd);
+            return EXIT_FAILURE;
+        }
+
+        // Monitoring loop
+        handle_events(inotify_fd, argv[1]);
+
         close(inotify_fd);
-        return EXIT_FAILURE;
+        return EXIT_SUCCESS;
     }
-
-    // Monitoring loop
-    handle_events(inotify_fd, argv[1]);
-
-    close(inotify_fd);
-    return EXIT_SUCCESS;
-}
