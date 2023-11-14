@@ -49,3 +49,4 @@ echo "\nWhat is the difference?"
 echo "ex1-1.c: (English) -> Encoding is ASCII"
 echo "ex1.c: (Russian) -> Encoding is Unicode"
 
+cd ..

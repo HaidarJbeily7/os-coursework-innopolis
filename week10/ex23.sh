@@ -1,4 +1,7 @@
 #!/bin/bash
+cd test
+
+echo "Random" > ex1.txt
 
 ln ex1.txt ex13.txt
 ln ex1.txt ex12.txt
@@ -21,12 +24,14 @@ du ex1.txt
 mv ex13.txt /tmp
 
 echo "Tracing all links to ex1.txt in current path:"
-find . -samefile ex1.txt
+find . -samefile ex1.txt 2> error.log
 
 echo "Tracing all links to ex1.txt in root path:"
-find / -samefile ex1.txt
+find / -samefile ex1.txt 2> error.log
 
 echo "Checking number of hard links for ex1.txt:"
 stat ex1.txt
 
 find . -samefile ex1.txt -exec rm {} \;
+
+cd ..

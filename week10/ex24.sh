@@ -12,7 +12,7 @@ mkdir ./tmp
 echo "Running ls -li after creating ./tmp:"
 ls -li
 
-echo "\n\nWhat is the diffrence? The diiference that after we created the ./tmp directory, the symbolic link is now pointing to the new directory and usable.\n\n"
+echo "\n\nWhat is the diffrence? The diiference that after we created the ./tmp directory, the symbolic link is now pointing to the new directory and usable but before that this was a broken link.\n\n"
 
 
 ./gen.sh 10 ./tmp/ex1.txt

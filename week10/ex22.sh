@@ -15,3 +15,5 @@ ls -li ex2
 echo " ex1, ex2 don't have the same inode number!!!\n\n"
 
 stat -c "%h - %n" /etc/* | grep ^3
+
+cd ..
