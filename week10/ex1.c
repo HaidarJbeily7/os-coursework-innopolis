@@ -156,7 +156,8 @@ int main(int argc, char **argv)
     // Create a symbolic link myfile13.txt
     snprintf(link_path, PATH_MAX, "%s/myfile13.txt", dir);
     create_sym_link(tmp_path, link_path);
-    file = fopen(link_path, "a");
+
+    file = fopen(tmp_path, "a");
     if (!file)
     {
         perror("fopen");
@@ -175,8 +176,11 @@ int main(int argc, char **argv)
     fprintf(file, "Additional content.\n");
     fclose(file);
 
+
+    snprintf(link_path, PATH_MAX, "%s/myfile11.txt", dir);
+
     // Remove all duplicates of hard links to myfile11.txt only in the watched directory
-    unlink_all(dir, file_path);
+    unlink_all(dir, link_path);
 
     // Print the stat info of the kept hard link and check the number of hard links
     struct stat statbuf;
