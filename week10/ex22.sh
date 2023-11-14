@@ -16,4 +16,7 @@ echo " ex1, ex2 don't have the same inode number!!!\n\n"
 
 stat -c "%h - %n" /etc/* | grep ^3
 
+
+echo "\n\n\nstat -c "%h - %n" /etc/* | grep "^3"\n
+This command lists files in the /etc directory and its subdirectories (/etc/*) and filters the results to display only files with 3 links (grep "^3")."
 cd ..
