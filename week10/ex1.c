@@ -53,7 +53,7 @@ void unlink_all(const char *dir, const char *source)
     struct dirent *entry;
     struct stat source_stat, entry_stat;
     char path[PATH_MAX];
-    int link_count = 0;
+    ino_t source_ino;
 
     if (stat(source, &source_stat) != 0)
     {
@@ -61,17 +61,18 @@ void unlink_all(const char *dir, const char *source)
         return;
     }
 
+    source_ino = source_stat.st_ino;
+
     while ((entry = readdir(d)) != NULL)
     {
         snprintf(path, PATH_MAX, "%s/%s", dir, entry->d_name);
         if (stat(path, &entry_stat) != 0)
             continue;
 
-        if (S_ISREG(entry_stat.st_mode) && entry_stat.st_ino == source_stat.st_ino)
+        if (S_ISREG(entry_stat.st_mode) && entry_stat.st_ino == source_ino)
         {
-            link_count++;
-            if (link_count > 1)
-            { // Keep only one hard link
+            if (strcmp(path, source) != 0)
+            { // Only unlink if not the source file
                 unlink(path);
                 printf("Removed hard link: %s\n", path);
             }
@@ -155,6 +156,14 @@ int main(int argc, char **argv)
     // Create a symbolic link myfile13.txt
     snprintf(link_path, PATH_MAX, "%s/myfile13.txt", dir);
     create_sym_link(tmp_path, link_path);
+    file = fopen(link_path, "a");
+    if (!file)
+    {
+        perror("fopen");
+        return EXIT_FAILURE;
+    }
+    fprintf(file, "Additional content.\n");
+    fclose(file);
 
     snprintf(link_path, PATH_MAX, "/tmp/myfile1.txt");
     file = fopen(link_path, "a");

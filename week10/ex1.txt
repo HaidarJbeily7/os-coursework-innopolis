@@ -1,0 +1,28 @@
+**Experiment 1: Creating and Monitoring Hard Links**
+
+1. Created a file 'myfile1.txt' with WD 1.
+2. Opened 'myfile1.txt'.
+3. Modified 'myfile1.txt'.
+4. Created 'myfile11.txt' with WD 1.
+5. Created 'myfile12.txt' with WD 1.
+6. Opened 'myfile11.txt'.
+7. Modified 'myfile11.txt'.
+8. Created 'myfile13.txt' with WD 1.
+
+**Observations:**
+
+- When 'myfile1.txt' was created, the monitor.c program reported a creation event with WD 1.
+- When 'myfile1.txt' was opened, the monitor.c program reported an open event.
+- When 'myfile1.txt' was modified, the monitor.c program reported a modification event.
+- When 'myfile11.txt' and 'myfile12.txt' were created as hard links to 'myfile1.txt', the monitor.c program reported creation events for both with WD 1.
+- When 'myfile11.txt' was opened, the monitor.c program reported an open event.
+- When 'myfile11.txt' was modified, the monitor.c program reported a modification event.
+- When 'myfile13.txt' (symbolic link) was created in the watched directory, the monitor.c program reported a creation event with WD 1.
+
+**Questions:**
+
+- Modify the file myfile11.txt (its content). Did the monitor.c program report an event for myfile11.txt?
+  - Answer: Yes, the monitor.c program reported a modification event when 'myfile11.txt' was modified. This indicates that changes to 'myfile11.txt' are monitored and reported.
+
+- Create a symbolic link myfile13.txt in the watched directory to /tmp/myfile1.txt. Modify the file /tmp/myfile1.txt (its content). Did the monitor.c program report an event for myfile13.txt?
+  - Answer: No, the monitor.c program did not report an event for 'myfile13.txt' when '/tmp/myfile1.txt' was modified. This is because symbolic links typically do not generate events when their target files are modified; instead, events occur on the target file itself ('/tmp/myfile1.txt' in this case).
