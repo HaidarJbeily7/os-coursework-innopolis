@@ -8,6 +8,7 @@
 #include <dirent.h>
 #include <string.h>
 #include <limits.h>
+#include <errno.h>
 
 int inotify_fd;
 char monitored_dir[PATH_MAX];
