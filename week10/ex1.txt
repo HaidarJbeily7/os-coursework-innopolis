@@ -18,6 +18,7 @@
 - When 'myfile11.txt' was opened, the monitor.c program reported an open event.
 - When 'myfile11.txt' was modified, the monitor.c program reported a modification event.
 - When 'myfile13.txt' (symbolic link) was created in the watched directory, the monitor.c program reported a creation event with WD 1.
+- The stat info of the remaining hard link, 'myfile11.txt,' was printed, indicating the number of hard links.
 
 **Questions:**
 
@@ -26,3 +27,6 @@
 
 - Create a symbolic link myfile13.txt in the watched directory to /tmp/myfile1.txt. Modify the file /tmp/myfile1.txt (its content). Did the monitor.c program report an event for myfile13.txt?
   - Answer: No, the monitor.c program did not report an event for 'myfile13.txt' when '/tmp/myfile1.txt' was modified. This is because symbolic links typically do not generate events when their target files are modified; instead, events occur on the target file itself ('/tmp/myfile1.txt' in this case).
+
+- After this, print the stat info of the kept hard link. Check the number of hard links and explain the difference.
+  - Answer: After removing 'myfile13.txt' and 'myfile12.txt,' the stat info of the remaining hard link 'myfile11.txt' was printed. The number of hard links is 2. This difference in the number of hard links (2 instead of 1) indicates that 'myfile11.txt' still has one hard link left, which is at /tmp/myfile1.txt outside the watched directory.
