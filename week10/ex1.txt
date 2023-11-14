@@ -8,6 +8,9 @@
 6. Opened 'myfile11.txt'.
 7. Modified 'myfile11.txt'.
 8. Created 'myfile13.txt' with WD 1.
+9. Removed 'myfile13.txt' (hard link) and 'myfile12.txt' (hard link).
+10. Printed the stat info of the remaining hard link, 'myfile11.txt'.
+11. Checked the number of hard links.
 
 **Observations:**
 
