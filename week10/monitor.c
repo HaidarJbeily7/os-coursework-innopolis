@@ -123,38 +123,39 @@ void handle_events(int fd, const char *dir)
             }
         }
     }
+}
 
-    int main(int argc, char **argv)
+int main(int argc, char **argv)
+{
+    if (argc != 2)
     {
-        if (argc != 2)
-        {
-            fprintf(stderr, "Usage: %s <path to monitor>\n", argv[0]);
-            return EXIT_FAILURE;
-        }
-
-        strncpy(monitored_dir, argv[1], PATH_MAX);
-
-        // Setup signal handler
-        signal(SIGINT, signal_handler);
-
-        inotify_fd = inotify_init();
-        if (inotify_fd < 0)
-        {
-            perror("inotify_init");
-            return EXIT_FAILURE;
-        }
-
-        int wd = inotify_add_watch(inotify_fd, argv[1], IN_ALL_EVENTS);
-        if (wd == -1)
-        {
-            perror("inotify_add_watch");
-            close(inotify_fd);
-            return EXIT_FAILURE;
-        }
-
-        // Monitoring loop
-        handle_events(inotify_fd, argv[1]);
-
-        close(inotify_fd);
-        return EXIT_SUCCESS;
+        fprintf(stderr, "Usage: %s <path to monitor>\n", argv[0]);
+        return EXIT_FAILURE;
     }
+
+    strncpy(monitored_dir, argv[1], PATH_MAX);
+
+    // Setup signal handler
+    signal(SIGINT, signal_handler);
+
+    inotify_fd = inotify_init();
+    if (inotify_fd < 0)
+    {
+        perror("inotify_init");
+        return EXIT_FAILURE;
+    }
+
+    int wd = inotify_add_watch(inotify_fd, argv[1], IN_ALL_EVENTS);
+    if (wd == -1)
+    {
+        perror("inotify_add_watch");
+        close(inotify_fd);
+        return EXIT_FAILURE;
+    }
+
+    // Monitoring loop
+    handle_events(inotify_fd, argv[1]);
+
+    close(inotify_fd);
+    return EXIT_SUCCESS;
+}
