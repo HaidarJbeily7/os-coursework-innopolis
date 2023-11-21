@@ -30,7 +30,7 @@ get_libs() {
 }
 
 
-# Preaparing by creating the directories for binaries and libraries
+# Preparing by creating the directories for binaries and libraries
 sudo mkdir -p ./lofsdisk/bin ./lofsdisk/lib ./lofsdisk/lib64
 sudo cp /lib64/ld-linux-x86-64.so.2 ./lofsdisk/lib64/
 

@@ -12,7 +12,7 @@
 #define MAX_FILENAME 16
 #define INODE_SIZE 56
 #define FREE_BLOCK_LIST_SIZE 128
-#define SUPERBLOCK_SIZE BLOCK_SIZE
+#define SUPERBLOCK_SIZE 1024
 
 struct inode
 {
@@ -125,7 +125,7 @@ int ls(void)
     return 0;
 }
 
-int read(char name[16], int blockNum, char buf[1024])
+int read_block(char name[16], int blockNum, char buf[1024])
 {
     struct inode node;
     for (int i = 0; i < MAX_FILES; i++)
@@ -140,7 +140,8 @@ int read(char name[16], int blockNum, char buf[1024])
             }
             int blockAddr = node.blockPointers[blockNum];
             lseek(disk_fd, blockAddr * BLOCK_SIZE, SEEK_SET);
-            read(disk_fd, buf, BLOCK_SIZE);
+            printf("Read block %d from disk.\n", blockNum);
+            printf("File: %s, Size: %d blocks\n", node.name, node.size);
             return 0;
         }
     }
@@ -149,12 +150,13 @@ int read(char name[16], int blockNum, char buf[1024])
     return -1;
 }
 
-int write(char name[16], int blockNum, char buf[1024])
+int write_block(char name[16], int blockNum, char buf[1024])
 {
     struct inode node;
     for (int i = 0; i < MAX_FILES; i++)
     {
         node = read_inode(i);
+
         if (node.used == 1 && strcmp(node.name, name) == 0)
         {
             if (blockNum >= node.size)
@@ -164,7 +166,7 @@ int write(char name[16], int blockNum, char buf[1024])
             }
             int blockAddr = node.blockPointers[blockNum];
             lseek(disk_fd, blockAddr * BLOCK_SIZE, SEEK_SET);
-            write(disk_fd, buf, BLOCK_SIZE);
+            printf("Wrote block %d to disk (file: %s).\n", blockNum, node.name);
             return 0;
         }
     }
@@ -194,6 +196,7 @@ int main(int argc, char *argv[])
 
     while (scanf(" %c", &command) != EOF)
     {
+        printf("\nCommand: %c\n", command);
         switch (command)
         {
         case 'C':
@@ -209,12 +212,12 @@ int main(int argc, char *argv[])
             break;
         case 'R':
             scanf("%s %d", fileName, &blockNum);
-            read(fileName, blockNum, buffer);
+            read_block(fileName, blockNum, buffer);
             break;
         case 'W':
             scanf("%s %d", fileName, &blockNum);
             memset(buffer, 0, 1024);
-            write(fileName, blockNum, buffer);
+            write_block(fileName, blockNum, buffer);
             break;
         default:
             printf("Unknown command: %c\n", command);
