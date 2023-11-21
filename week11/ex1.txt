@@ -1,0 +1,31 @@
+Contents of root directory (/):
+libx32
+dev
+home
+run
+root
+..
+cdrom
+lost+found
+usr
+media
+lib64
+snap
+bin
+lib32
+mnt
+.
+swapfile
+sbin
+sys
+proc
+tmpjcef-p
+var
+srv
+opt
+boot
+lib
+etc
+tmp
+Analysis:
+In the chroot environment, the program sees the root as the LOFS. Outside, it sees the system's root directory.
